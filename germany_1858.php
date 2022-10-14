@@ -78,59 +78,35 @@ function getJournalEntries($data) {
 			$info[] = $val;
 		}
 	}
-	// foreach($info as &$val){
-	// 	foreach($val['element_texts'] as $k => $v){
-	// 		if(strlen($v['text']) > 30 || strtolower($v['text']) != 'germany 1858'){
-	// 			unset($val['element_texts'][$k]);
-	// 		}
-	// 	}
-	// }
 	$info = json_decode(json_encode($info));
 
     return $info;
 }
 
-$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
-$data = json_decode($resp, true);
-$entries = getJournalEntries($data);
-
-// https://stackoverflow.com/questions/8144061/using-php-to-get-dom-element
-
-?>
-</head>
-<?php
-
-$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items/21600");
 #$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
-#print_r(gettype($resp));
-if (!$resp)
-    print("False");
-else {
-    #print("\n");
-    $data = json_decode($resp, true);
-    #print_r($data[0]);
-
-    $data = $data["element_texts"];
-    $date = $data[3]["text"];
-    $page = $data[6]["text"];
-    $journal = $data[4]["text"];
-
-    $dom = new DOMDocument("1.0", "utf-8");
-    $dom->appendChild(makeEntrySummary($dom, $date, $journal, $page));
-
-    echo $dom->saveXML();
-}
+#$data = json_decode($resp, true);
+#$entries = getJournalEntries($data);
 ?>
-<ul>
-    <?php
-    for ($i = 0; $i < 10; $i++) {
-    ?>
-        <li>
-            <?php
-            echo $i;
-            ?>
-        </li>
-    <?php
-    }
-    ?>
-</ul>
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Germany 1858</h1>
+    </header>
+    <ul>
+      <!-- TODO: replace placeholders -->
+      <li>
+        <details>
+          <summary>April (13 Items)</summary>
+          <div>
+            <details>
+              <summary>1858-04-11 -- Journal Entry (Harris &amp; Johnston, 
+                <i>Germany 1858</i>: 310-311.)
+              </summary>
+              <div><p>-=-=-=-<br />Sunday 11. We went to the Jesuitenkirche for the first time this morning. The effect of the interior is...[SNIP]</p></div>
+            </details>
+          </div>
+        </details>
+      </li>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+/* https://jsbin.com/wogeyey/1/edit */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+  100% {
+    opacity: 1;
+    height: var(--details-height-open, '100%');
+  }
+}
+
+html {
+  --details-transition-time: 400ms;
+}
+
+details {
+  /* https://stackoverflow.com/a/66482293 */
+  margin: 1.3rem 0;
+  margin-left: 0.5em;
+  padding: 0.5rem;
+  transition: all ease-out var(--details-transition-time, 0);
+  max-height: var(--details-height-closed, auto);
+}
+
+details[open] {
+  max-height: var(--details-height-open, auto);
+  border: 1px solid #aaa;
+}
+
+details summary {
+  cursor: pointer;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  padding: 0.5em;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.8em;
+}
+
+details [details, div] {
+  transition: all ease-out var(--details-transition-time, 0);
+  max-height: var(--details-content-height-closed, auto);
+  overflow: hidden;
+  animation-name: slideDown;
+  animation-duration: var(--details-transition-time);
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 5 em;
+    z-index: 1;
+    background-color: #e0e2e0;
+}
+
+body {
+    padding-top: 5em;
+}
+
+summary {
+  padding: 1rem;
+  display: block;
+  padding-left: 2.2rem;
+  position: relative;
+  cursor: pointer;
+}
+
+summary:before {
+  content: '';
+  border-width: .4rem;
+  border-style: solid;
+  border-color: transparent transparent transparent #000;
+  position: absolute;
+  top: 1.1rem;
+  left: 1rem;
+  transform: rotate(0);
+  transform-origin: .2rem 50%;
+  transition: .25s transform ease;
+}
+
+summary {
+  padding: 1rem;
+  display: block;
+  padding-left: 2.2rem;
+  position: relative;
+  cursor: pointer;
+}
+
+summary:before {
+  content: '';
+  border-width: .4rem;
+  border-style: solid;
+  border-color: transparent transparent transparent #000;
+  position: absolute;
+  top: 1.1rem;
+  left: 1rem;
+  transform: rotate(0);
+  transform-origin: .2rem 50%;
+  transition: .25s transform ease;
+}
+
+
+details[open] > summary:before {
+  transform: rotate(90deg);
+}
+
+div {}
+
+@keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		transform: translateY(-1.25em);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes fadeInUp {
+	0% {
+		opacity: 0;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(-1.25em);
+	}
+}
+details[open] > div {
+	animation-name: fadeInDown;
+  animation-duration: 1s;
+}
+details[close] > div {
+	animation-name: fadeInUpn;
+  animation-duration: 1s;
+}
