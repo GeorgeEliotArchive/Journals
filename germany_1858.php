@@ -93,6 +93,11 @@ function getElement($entry, $elementName) {
     return "";
 }
 
+function getMonthString($entry) {
+    $date = new DateTime(getElement($entry, "Date"));
+    return $date->format('F');
+}
+
 # Temporarily commented out for testing
 #$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
 #$data = json_decode($resp, true);
@@ -112,7 +117,7 @@ $entry = json_decode($resp, true);
     <ul>
       <li>
         <details>
-          <summary>April (13 Items)</summary>
+          <summary><?php echo getMonthString($entry);?> (13 Items)</summary>
           <div>
             <details>
               <summary>
