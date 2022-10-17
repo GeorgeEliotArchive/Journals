@@ -62,7 +62,7 @@ function CallAPI($method, $url, $data = false)
     return $result;
 }
 
-function getJournalEntries($data) {
+function getJournalEntries($data, $journal) {
     $info = array();
 	foreach($data as $val){
 		$is_germ = false;
@@ -76,7 +76,6 @@ function getJournalEntries($data) {
 			$info[] = $val;
 		}
 	}
-	$info = json_decode(json_encode($info));
 
     return $info;
 }
@@ -98,10 +97,9 @@ function getMonthString($entry) {
     return $date->format('F');
 }
 
-# Temporarily commented out for testing
-#$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
-#$data = json_decode($resp, true);
-#$entries = getJournalEntries($data);
+$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
+$data = json_decode($resp, true);
+$entries = getJournalEntries($data, $journal);
 
 # Testing setup
 $resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items/21537");
