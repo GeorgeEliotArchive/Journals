@@ -111,6 +111,35 @@ foreach ($entries as $entry) {
     // Append this entry to the appropriate month's array.
     $months[$month][] = $entry;
 }
+
+// Sort the months
+$monthNames = array(
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+);
+$newMonths = array();
+foreach ($monthNames as $monthName) {
+    if (array_key_exists($monthName, $months)) {
+        $newMonths[$monthName] = $months[$monthName];
+
+        // Sort entries within the month
+        // https://stackoverflow.com/a/31298778
+        usort($newMonths[$monthName], function ($a, $b) {
+            return getElement($a, "Date") <=> getElement($b, "Date");
+        });
+    }
+}
+$months = $newMonths;
 ?>
   </head>
   <body>
