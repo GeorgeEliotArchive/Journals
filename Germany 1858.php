@@ -148,29 +148,25 @@ $months = $newMonths;
         <?php echo $journal; ?>
       </h1>
     </header>
-    <ul>
-      <?php
-      foreach (array_keys($months) as $month) {
-          $monthEntries = $months[$month];
-      ?>
-      <li>
+    <?php
+    foreach (array_keys($months) as $month) {
+        $monthEntries = $months[$month];
+    ?>
+    <details>
+      <summary><?php echo $month;?> (<?php echo sizeof($monthEntries);?> Items)</summary>
+      <div>
+        <?php foreach ($monthEntries as $entry) { ?>
         <details>
-          <summary><?php echo $month;?> (<?php echo sizeof($monthEntries);?> Items)</summary>
-          <div>
-            <?php foreach ($monthEntries as $entry) { ?>
-            <details>
-              <summary>
-                <?php echo getElement($entry, "Date"); ?>
-                -- Journal Entry (Harris &amp; Johnston, 
-                <i><?php echo $journal; ?></i>: <?php echo getElement($entry, "Source"); ?>.)
-              </summary>
-              <div><?php echo getElement($entry, "Journal Entry"); ?></div>
-            </details>
-            <?php } /* end foreach entry */?>
-          </div>
+          <summary>
+            <?php echo getElement($entry, "Date"); ?>
+            -- Journal Entry (Harris &amp; Johnston, 
+            <i><?php echo $journal; ?></i>: <?php echo getElement($entry, "Source"); ?>.)
+          </summary>
+          <div><?php echo getElement($entry, "Journal Entry"); ?></div>
         </details>
-      </li>
-      <?php } /* end foreach month */?>
-    </ul>
+        <?php } /* end foreach entry */?>
+      </div>
+    </details>
+    <?php } /* end foreach month */?>
   </body>
 </html>
