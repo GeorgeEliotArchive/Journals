@@ -120,10 +120,15 @@ foreach ($entries as $entry) {
       </h1>
     </header>
     <ul>
+      <?php
+      foreach (array_keys($months) as $month) {
+          $monthEntries = $months[$month];
+      ?>
       <li>
         <details>
-          <summary><?php echo getMonthString($entry);?> (13 Items)</summary>
+          <summary><?php echo $month;?> (<?php echo sizeof($monthEntries);?> Items)</summary>
           <div>
+            <?php foreach ($monthEntries as $entry) { ?>
             <details>
               <summary>
                 <?php echo getElement($entry, "Date"); ?>
@@ -132,9 +137,11 @@ foreach ($entries as $entry) {
               </summary>
               <div><?php echo getElement($entry, "Journal Entry"); ?></div>
             </details>
+            <?php } /* end foreach entry */?>
           </div>
         </details>
       </li>
+      <?php } /* end foreach month */?>
     </ul>
   </body>
 </html>
