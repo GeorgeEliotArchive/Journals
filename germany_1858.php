@@ -62,15 +62,6 @@ function CallAPI($method, $url, $data = false)
     return $result;
 }
 
-function makeEntrySummary($dom, $date, $journal, $page) {
-    $summary = $dom->createElement('h3');
-    $summary->appendChild($dom->createTextNode($date.' -- Journal Entry (Harris & Johnston, '));
-    $summary->appendChild($dom->createElement('i', $journal));
-    $summary->appendChild($dom->createTextNode(': '.$page.'.)'));
-
-    return $summary;
-}
-
 function getJournalEntries($data) {
     $info = array();
 	foreach($data as $val){
@@ -90,26 +81,46 @@ function getJournalEntries($data) {
     return $info;
 }
 
+// Retrieves a specific item of text from an item in the collection.
+function getElement($entry, $elementName) {
+    $elements = $entry["element_texts"];
+
+    foreach ($elements as $element) {
+        if ($element["element"]["name"] == $elementName)
+            return $element["text"];
+    }
+
+    return "";
+}
+
+# Temporarily commented out for testing
 #$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
 #$data = json_decode($resp, true);
 #$entries = getJournalEntries($data);
+
+# Testing setup
+$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items/21537");
+$entry = json_decode($resp, true);
 ?>
   </head>
   <body>
     <header class="topbar">
-      <h1>Germany 1858</h1>
+      <h1>
+        <?php echo $journal; ?>
+      </h1>
     </header>
     <ul>
-      <!-- TODO: replace placeholders -->
       <li>
         <details>
           <summary>April (13 Items)</summary>
           <div>
             <details>
-              <summary>1858-04-11 -- Journal Entry (Harris &amp; Johnston, 
-                <i>Germany 1858</i>: 310-311.)
+              <summary>
+                <?php echo getElement($entry, "Date"); ?>
+                -- Journal Entry (Harris &amp; Johnston, 
+                <i><?php echo $journal; ?></i>: <?php echo getElement($entry, "Source"); ?>.)
               </summary>
-              <div><p>-=-=-=-<br />Sunday 11. We went to the Jesuitenkirche for the first time this morning. The effect of the interior is...[SNIP]</p></div>
+              <div><?php echo getElement($entry, "Journal Entry"); ?></div>
             </details>
           </div>
         </details>
