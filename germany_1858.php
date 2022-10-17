@@ -101,9 +101,16 @@ $resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17")
 $data = json_decode($resp, true);
 $entries = getJournalEntries($data, $journal);
 
-# Testing setup
-$resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items/21537");
-$entry = json_decode($resp, true);
+$months = array();
+foreach ($entries as $entry) {
+    $month = getMonthString($entry);
+    // Guarantee the month is in the months array.
+    if (!array_key_exists($month, $months))
+        $months[$month] = array();
+
+    // Append this entry to the appropriate month's array.
+    $months[$month][] = $entry;
+}
 ?>
   </head>
   <body>
