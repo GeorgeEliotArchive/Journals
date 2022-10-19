@@ -53,7 +53,7 @@ function CallAPI($method, $url, $data = false)
     $result = curl_exec($curl);
 
     if (!$result) {
-        trigger_error($curl_e);
+        trigger_error($curl);
         //print(curl_error($curl));
     }
 
