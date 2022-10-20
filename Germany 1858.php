@@ -93,8 +93,18 @@ function getElement($entry, $elementName) {
 }
 
 function getMonthString($entry) {
-    $date = new DateTime(getElement($entry, "Date"));
-    return $date->format('F');
+  $count = 0;
+  $monthNum = '';
+  $chars = str_split(getElement($entry, "Date"));
+  foreach($chars as $char) {
+    if (is_numeric($char) && $count >= 4 && $count < 6) {
+        $monthNum .= $char;
+        $count += 1;
+    } elseif (is_numeric($char)) {
+        $count += 1;
+    }
+}
+  return date("F", mktime(0, 0, 0, intval($monthNum), 10));
 }
 
 $resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
