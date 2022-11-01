@@ -67,7 +67,7 @@ function getJournalEntries($data, $journal) {
 	foreach($data as $val){
 		$is_germ = false;
 		foreach($val['element_texts'] as $v){
-			if(strlen($v['text']) < 30 && strtolower($v['text']) == strtolower($journal)){
+			if(strlen($v['text']) == strlen($journal) && strtolower($v['text']) == strtolower($journal)){
 				$is_germ = true;
 				break;
 			}
