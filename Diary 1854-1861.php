@@ -82,14 +82,28 @@ function getJournalEntries($data, $journal) {
 
 // Retrieves a specific item of text from an item in the collection.
 function getElement($entry, $elementName) {
+    global $journal;
     $elements = $entry["element_texts"];
 
-    foreach ($elements as $element) {
-        if ($element["element"]["name"] == $elementName)
-            return $element["text"];
+    if ($elementName == "Source") {
+        // Page numbers are lumped together with the source
+        // If we want the journal name we can use $journal
+        foreach ($elements as $element) {
+            if ($element["element"]["name"] == $elementName
+                && $element["text"] != $journal) {
+                return $element["text"];
+            }
+        }
+    } else {
+        foreach ($elements as $element) {
+            if ($element["element"]["name"] == $elementName) {
+                return $element["text"];
+            }
+        }
     }
 
-    return "";
+    // If we've gotten here, the element does not exist.
+    return "Element missing: ".$elementName."!";
 }
 
 // Retrieves the month from each entry.
