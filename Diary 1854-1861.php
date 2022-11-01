@@ -140,6 +140,8 @@ $entries = getJournalEntries($data, $journal);
 $years = array();
 foreach ($entries as $entry) {
     $year = getYear($entry);
+    if (strlen($year) < 4)
+        continue;
     // Checks if year is in years array; if not, year is created.
     if (!array_key_exists($year, $years))
         $years[$year] = array();
