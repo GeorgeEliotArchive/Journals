@@ -175,4 +175,63 @@ function arrangeEntriesByMonth($entries) {
 
     return $sortedMonths;
 }
+
+// Retrieves the year from each entry
+function getYear($entry) {
+    return intval(substr(getElement($entry, "Date"), 0, 4));
+}
+
+function arrangeEntriesByYear($entries) {
+    // years array, structure of year => month => entry
+    $years = array();
+    foreach ($entries as $entry) {
+        $year = getYear($entry);
+        // Checks if year is in years array; if not, year is created.
+        if (!array_key_exists($year, $years))
+            $years[$year] = array();
+
+        $month = getMonthString($entry);
+        // Guarantee the month is in the months array.
+        if (!array_key_exists($month, $years[$year]))
+            $years[$year][$month] = array();
+
+        // Append this entry to the appropriate month's array.
+        $years[$year][$month][] = $entry;
+    }
+    // Sort the months
+    $monthNames = array(
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    );
+
+    foreach ($years as $year => $months) {
+        $newMonths = array();
+        foreach ($monthNames as $monthName) {
+            if (array_key_exists($monthName, $months)) {
+                $newMonths[$monthName] = $months[$monthName];
+
+                // Sort entries within the month
+                // https://stackoverflow.com/a/31298778
+                usort($newMonths[$monthName], function ($a, $b) {
+                    return getElement($a, "Date") <=> getElement($b, "Date");
+                });
+            }
+        }
+        $years[$year] = $newMonths;
+    }
+    // Sort the year
+    ksort($years);
+
+    return $years;
+}
 ?>
