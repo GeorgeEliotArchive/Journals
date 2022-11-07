@@ -71,12 +71,18 @@ function getElement($entry, $elementName) {
     global $journal;
     $elements = $entry["element_texts"];
 
+    // Page numbers are lumped together with the source.
     if ($elementName == "Source") {
-        // Page numbers are lumped together with the source
-        // If we want the journal name we can use $journal
         foreach ($elements as $element) {
-            if ($element["element"]["name"] == $elementName
-                && $element["text"] != $journal) {
+            if ($element["element"]["name"] == "Source"
+                && !is_numeric($element["text"][0])) {
+                return $element["text"];
+            }
+        }
+    } else if ($elementName == "Page") {
+        foreach ($elements as $element) {
+            if ($element["element"]["name"] == "Source"
+                && is_numeric($element["text"][0])) {
                 return $element["text"];
             }
         }
