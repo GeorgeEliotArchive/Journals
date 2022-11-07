@@ -178,7 +178,11 @@ function arrangeEntriesByMonth($entries) {
 
 // Retrieves the year from each entry
 function getYear($entry) {
-    return intval(substr(getElement($entry, "Date"), 0, 4));
+    $dateStr = getElement($entry, "Date");
+    if ($dateStr[0] == '[')
+        return intval(substr($dateStr, 1, 5));
+    else
+        return intval(substr($dateStr, 0, 4));
 }
 
 function arrangeEntriesByYear($entries) {
