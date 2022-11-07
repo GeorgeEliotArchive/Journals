@@ -18,6 +18,11 @@
     <?php require "common_head.php";?>
   </head>
   <body>
+    <header class="topbar">
+      <h1>
+        <?php echo $journal; ?>
+      </h1>
+    </header>
     <?php require "single_year_body.php";?>
   </body>
 </html>

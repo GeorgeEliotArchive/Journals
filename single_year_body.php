@@ -1,8 +1,3 @@
-<header class="topbar">
-  <h1>
-    <?php echo $journal; ?>
-  </h1>
-</header>
 <?php
  foreach (array_keys($months) as $month) {
  $monthEntries = $months[$month];
