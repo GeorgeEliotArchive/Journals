@@ -27,7 +27,7 @@ function CallAPI($method, $url, $data = false)
                       'Accept: application/json'));
 
     // https://www.php.net/manual/en/function.curl-exec.php
-    curl_setopt($curl, CURLOPT_TIMEOUT, 15); // this takes a LONG time...
+    curl_setopt($curl, CURLOPT_TIMEOUT, 30); // this takes a LONG time...
 
     // Optional Authentication:
     // curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -39,7 +39,7 @@ function CallAPI($method, $url, $data = false)
     $result = curl_exec($curl);
 
     if (!$result) {
-        trigger_error($curl);
+        trigger_error(curl_error($curl));
         //print(curl_error($curl));
     }
 
