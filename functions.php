@@ -113,6 +113,26 @@ function getMonthString($entry) {
     return date("F", mktime(0, 0, 0, intval($monthNum), 10));
 }
 
+// Returns day from entry Date (everything after the second dash)
+// Used for creating the entry anchors
+function getDay($entry) {
+    $count = 0;
+    $day = '';
+    $date = getElement($entry, "Date");
+    $chars = str_split($date);
+    $i = 0;
+    foreach($chars as $char) {
+        if ($char == '-' && $count == 1) {
+            $day = substr($date, $i + 1);
+            break;
+        } elseif ($char == '-') {
+            $count += 1;
+        }
+        $i += 1;
+    }
+    return $day;
+}
+
 function arrangeEntriesByMonth($entries) {
     $months = array();
     foreach ($entries as $entry) {

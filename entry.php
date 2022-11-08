@@ -1,4 +1,4 @@
-<details>
+<details id="<?php echo $year.'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>">
   <summary>
     <?php echo getElement($entry, "Date"); ?>
     -- Journal Entry (Harris &amp; Johnston, <em>Journals</em>, 
