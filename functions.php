@@ -190,6 +190,9 @@ function arrangeEntriesByYear($entries) {
     $years = array();
     foreach ($entries as $entry) {
         $year = getYear($entry);
+        if ($year < 1000)
+            print_r('Warning: Year extraction failed on date string "'.getElement($entry, 'Date').'"!');
+
         // Checks if year is in years array; if not, year is created.
         if (!array_key_exists($year, $years))
             $years[$year] = array();
@@ -237,5 +240,22 @@ function arrangeEntriesByYear($entries) {
     ksort($years);
 
     return $years;
+}
+
+function getSearchResults($data, $searchOptions) {
+    $keyword = $searchOptions["keyword"];
+    $results = array();
+    foreach($data as $entry) {
+        foreach($entry['element_texts'] as $entryText) {
+            if ($entryText["element"]["name"] == "Journal Entry") {
+                $entryContent = $entryText['text'];
+                if (strpos($entryContent, $keyword) !== false)
+                    $results[] = $entry;
+                break;
+            }
+        }
+    }
+
+    return $results;
 }
 ?>
