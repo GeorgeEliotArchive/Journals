@@ -11,4 +11,4 @@
   </div>
 </details>
 <?php } /* end foreach month */?>
-<script type="text/javascript" src="./open_entry.js"/>
+<script type="text/javascript" src="./open_entry.js"></script>

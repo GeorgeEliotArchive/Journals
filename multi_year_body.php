@@ -23,4 +23,4 @@
   <?php } /* end foreach month */?>
 </details>
 <?php } /* end foreach year */?>
-<script type="text/javascript" src="./open_entry.js"/>
+<script type="text/javascript" src="./open_entry.js"></script>

@@ -1,16 +1,37 @@
-// Checks if anchor to entry is in URL
-// https://stackoverflow.com/a/10076097
-if (window.location.hash) {
-    // Gets the anchor from URL
-    let hash = window.location.hash.slice(1);
-    // https://stackoverflow.com/a/55377750
-    // Splits and slices anchor to get month and year detail anchors
-    let prefixes = hash.split("-", 3).slice(0, 2);
-    // Opens year and month detail
-    for(const prefix of prefixes) {
-        document.getElementById(prefix).open = true;
+// returns prefixes; anchor(s) that nest another
+// (e.g. 1862-01-09), '1862' and '01' are prefixes to 09 entry.
+function getPrefixes(anchor) {
+    let prefixes = [];
+    // if anchor has dashes, split and store the first two prefixes
+    // (e.g.) '1862-01-09' -> ['1862', '01']
+    if (anchor.includes('-')) {
+        prefixes = anchor.split('-').slice(0, 2);
+    } else {
+        prefix.push(anchor);
     }
-    // Opens entry
-    let entry = document.getElementById(hash);
-    entry.open = true;
+    return prefixes;
+}
+
+// wait for anchors to generate
+window.onload = function() {
+    // if anchor exists in url
+    if (window.location.hash) {
+        // save anchor from url
+        let anchor = window.location.hash.substring(1);
+        let prefixes = getPrefixes(anchor);
+        // if year or month in prefix, open them
+        for (const prefix of prefixes) {
+            if (document.getElementById(prefix)) {
+                document.getElementById(prefix).open = true;
+            }
+        }
+        // If entry date in anchor, open it
+        if (document.getElementById(anchor)) {
+            document.getElementById(anchor).open = true;
+        } else {
+            // otherwise, reassign hash in url to prefixes to represent a valid anchor
+            // e.g. hash in url '#1862-01-203209320943----232-' -> '#1862-01'
+            window.location.hash = prefixes.join("-");
+        }
+    }
 }
