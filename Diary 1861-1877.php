@@ -53,7 +53,7 @@ function CallAPI($method, $url, $data = false)
     $result = curl_exec($curl);
 
     if (!$result) {
-        trigger_error($curl);
+        trigger_error($curl, "x");
         //print(curl_error($curl));
     }
 
@@ -92,6 +92,26 @@ function getElement($entry, $elementName) {
     return "";
 }
 
+// Returns day from entry Date (everything after the second dash)
+// Used for creating the entry anchors
+function getDay($entry) {
+    $count = 0;
+    $day = '';
+    $date = getElement($entry, "Date");
+    $chars = str_split($date);
+    $i = 0;
+    foreach($chars as $char) {
+        if ($char == '-' && $count == 1) {
+            $day = substr($date, $i + 1);
+            break;
+        } elseif ($char == '-') {
+            $count += 1;
+        }
+        $i += 1;
+    }
+    return $day;
+}
+
 // Retrieves the month from each entry.
 function getMonthString($entry) {
     // Count variable to track how many numeric characters iterated over.
@@ -122,7 +142,7 @@ $resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17")
 $data = json_decode($resp, true);
 $entries = getJournalEntries($data, $journal);
 
-// years array, structure of year => month => entry
+// Years array, structure of year => month => entry
 $years = array();
 foreach ($entries as $entry) {
     $year = getYear($entry);
@@ -183,21 +203,21 @@ ksort($years);
     // For each year, display the year in detail tag.
     foreach ($years as $year => $months) {
     ?>
-    <details>
+    <details id="<?php echo $year; ?>">
     <summary><?php echo $year;?></summary>
         <?php
         // For each month, display the month in detail tag.
         foreach (array_keys($months) as $month) {
             $monthEntries = $months[$month];
         ?>
-        <details>
+        <details id="<?php echo date('m',strtotime($month)); ?>">
         <summary><?php echo $month;?> (<?php echo sizeof($monthEntries);?> Items)</summary>
         <div>
             <?php 
             // For each entry, display the date in detail tag.
             foreach ($monthEntries as $entry) { 
             ?>
-            <details>
+            <details id="<?php echo $year.'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>">
             <summary>
                 <?php echo getElement($entry, "Date"); ?>
                 -- Journal Entry (Harris &amp; Johnston, <em>Journals</em>,
@@ -211,5 +231,23 @@ ksort($years);
         <?php } /* end foreach month */?>
     </details>
     <?php } /* end foreach year */?>
+    <script>
+        // Checks if anchor to entry is in URL
+        // https://stackoverflow.com/a/10076097
+        if (window.location.hash) {
+            // Gets the anchor from URL
+            let hash = window.location.hash.slice(1);
+            // https://stackoverflow.com/a/55377750
+            // Splits and slices anchor to get month and year detail anchors
+            let prefixes = hash.split("-", 3).slice(0, 2);
+            // Opens year and month detail
+            for(const prefix of prefixes) {
+                document.getElementById(prefix).open = true;
+            }
+            // Opens entry
+            let entry = document.getElementById(hash);
+            entry.open = true;
+        }
+    </script>
   </body>
 </html>
