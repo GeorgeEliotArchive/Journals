@@ -242,16 +242,38 @@ function arrangeEntriesByYear($entries) {
     return $years;
 }
 
+// Example URL Parameters:
+// ?keywords[1]=this&keywords[2]=that&strict_caps
+// ?keywords[1]=Pug&keywords[2]=Bank&start_year=1860&end_year=1865
 function getSearchResults($data, $searchOptions) {
-    $keyword = $searchOptions["keyword"];
+    if (array_key_exists('keywords', $searchOptions))
+        $keywords = $searchOptions["keywords"];
+    else
+        $keywords = array();
+    $strict_caps = array_key_exists('strict_caps', $searchOptions);
     $results = array();
+
+    // Loop through the journal entries, checking conditions on each.
     foreach($data as $entry) {
+        if (array_key_exists('start_year', $searchOptions)
+            && $searchOptions['start_year'] > getYear($entry))
+            continue;
+
+        if (array_key_exists('end_year', $searchOptions)
+            && $searchOptions['end_year'] < getYear($entry))
+            continue;
+
         foreach($entry['element_texts'] as $entryText) {
+            // We only check the body of the journal entry.
             if ($entryText["element"]["name"] == "Journal Entry") {
                 $entryContent = $entryText['text'];
-                if (strpos($entryContent, $keyword) !== false)
-                    $results[] = $entry;
-                break;
+                foreach($keywords as $keyword) {
+                    if (($strict_caps && strpos($entryContent, $keyword) !== false)
+                        || stripos($entryContent, $keyword) !== false) {
+                        $results[] = $entry;
+                        break 2; // Skip to the next entry
+                    }
+                }
             }
         }
     }

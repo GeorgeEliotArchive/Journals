@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <?php
  require "functions.php";
- $url_params = $_GET ?? array();
+ // https://stackoverflow.com/a/1764199
+ if ($_GET)
+     // https://www.php.net/manual/en/reserved.variables.server.php
+     parse_str($_SERVER['QUERY_STRING'], $url_params);
+ else
+     $url_params = array();
 
  $resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
  $data = json_decode($resp, true);
