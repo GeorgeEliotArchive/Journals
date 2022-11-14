@@ -138,3 +138,25 @@ details[close] > div {
 	animation-name: fadeInUpn;
   animation-duration: 1s;
 }
+
+button {
+  background-color: #fff;
+  border: 1px solid #e8ebeb;
+  border-radius: 4px;
+  box-shadow: rgba(210, 210, 210, .5) 0 2px 4px 0;
+  cursor: pointer;
+  display: inline-block;
+  scale: 80%;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button:hover {
+  background-color: #f7fafa;
+}
+
+button:focus {
+  box-shadow: rgba(210, 210, 210, .3) 0 2px 4px 0;
+}
