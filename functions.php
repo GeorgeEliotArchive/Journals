@@ -247,19 +247,25 @@ function arrangeEntriesByYear($entries) {
 // ?keywords[1]=Pug&keywords[2]=Bank&start_year=1860&end_year=1865
 function getSearchResults($data, $searchOptions) {
     if (array_key_exists('keywords', $searchOptions))
-        $keywords = $searchOptions["keywords"];
+        $keywords = preg_split("/[\s]/", $searchOptions["keywords"]);
     else
-        $keywords = array();
-    $strict_caps = array_key_exists('strict_caps', $searchOptions);
+        $keywords = array('');
     $results = array();
 
     // Loop through the journal entries, checking conditions on each.
     foreach($data as $entry) {
+        if (array_key_exists('journal', $searchOptions)
+            && $searchOptions['journal'] != 'JournalName'
+            && $searchOptions['journal'] != getElement($entry, "Source"))
+            continue;
+
         if (array_key_exists('start_year', $searchOptions)
+            && $searchOptions['start_year'] != "StartingYear"
             && $searchOptions['start_year'] > getYear($entry))
             continue;
 
         if (array_key_exists('end_year', $searchOptions)
+            && $searchOptions['end_year'] != "EndingYear"
             && $searchOptions['end_year'] < getYear($entry))
             continue;
 
@@ -268,8 +274,7 @@ function getSearchResults($data, $searchOptions) {
             if ($entryText["element"]["name"] == "Journal Entry") {
                 $entryContent = $entryText['text'];
                 foreach($keywords as $keyword) {
-                    if (($strict_caps && strpos($entryContent, $keyword) !== false)
-                        || stripos($entryContent, $keyword) !== false) {
+                    if (stripos($entryContent, $keyword) !== false) {
                         $results[] = $entry;
                         break 2; // Skip to the next entry
                     }
