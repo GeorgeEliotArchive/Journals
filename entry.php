@@ -1,4 +1,4 @@
-<?php $anchor = $year.'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>
+<?php $anchor = getYear($entry).'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>
 <details id="<?php echo $anchor; ?>">
   <summary>
     <?php echo getElement($entry, "Date"); ?>
