@@ -30,8 +30,8 @@
       <form action="./search.php" method="get">
         Keywords: <input name="keywords" type="text" ><br>
         <hr style="width:600px; margin-left:0px">
-        <!--Accurate Search： <input name="precise_string" type="text" ><br>
-        <hr style="width:600px; margin-left:0px">-->
+        Exact Search： <input name="exact" type="text" ><br>
+        <hr style="width:600px; margin-left:0px">
         Time range from 
         <select name="start_year" style="width:100px">
           <option value="StartingYear">Year</option>

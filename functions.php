@@ -273,6 +273,10 @@ function getSearchResults($data, $searchOptions) {
             // We only check the body of the journal entry.
             if ($entryText["element"]["name"] == "Journal Entry") {
                 $entryContent = $entryText['text'];
+                if (array_key_exists('exact', $searchOptions)
+                    && strpos($entryContent, $searchOptions['exact']) === false)
+                    continue;
+
                 foreach($keywords as $keyword) {
                     if (stripos($entryContent, $keyword) !== false) {
                         $results[] = $entry;
