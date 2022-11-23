@@ -5,9 +5,9 @@
 <details id="<?php echo date('m',strtotime($month)); ?>">
   <summary><?php echo $month;?> (<?php echo sizeof($monthEntries);?> Items)</summary>
   <div>
-    <?php foreach ($monthEntries as $entry) { ?>
-    <?php require "entry.php"; ?>
-    <?php } /* end foreach entry */?>
+    <?php foreach ($monthEntries as $entry) {
+      require "entry.php";
+    } /* end foreach entry */?>
   </div>
 </details>
 <?php } /* end foreach month */?>
