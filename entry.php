@@ -1,4 +1,3 @@
-<?php $anchor = getYear($entry).'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>
 <style>
 .tooltip {
   position: relative;
@@ -7,19 +6,20 @@
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 140px;
-  background-color: #555;
+  width: 135px;
+  background-color: #60605D;
   color: #fff;
   text-align: center;
-  border-radius: 6px;
+  border-radius: 5px;
   padding: 5px;
   position: absolute;
   z-index: 1;
-  bottom: 150%;
+  bottom: 100%;
   left: 50%;
-  margin-left: -75px;
+  margin-left: -67px;
+  margin-bottom: 10px;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.5s;
 }
 
 .tooltip .tooltiptext::after {
@@ -30,7 +30,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: #60605D transparent transparent transparent;
 }
 
 .tooltip:hover .tooltiptext {
@@ -38,6 +38,8 @@
   opacity: 1;
 }
 </style>
+
+<?php $anchor = getYear($entry).'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>
 <details id="<?php echo $anchor; ?>">
   <summary>
     <?php echo getElement($entry, "Date"); ?>
@@ -55,6 +57,8 @@
 
 <script>
   // https://stackoverflow.com/q/4825295
+  // store previous tooltip id to change it back after copying another link
+  var prev_tooltip;
   function replyId(clicked_id) {
     // removes anchor (if any) and adds anchor
     let url = window.location.href.split('#')[0] + "#" + clicked_id;
@@ -66,7 +70,11 @@
     }
     
     // change tooltip text
+    if (prev_tooltip) {
+      prev_tooltip.innerHTML = "Copy to clipboard";
+    }
     let tooltip = document.getElementById(clicked_id + "tooltip");
     tooltip.innerHTML = "Copied";
+    prev_tooltip = tooltip;
   }
 </script>
