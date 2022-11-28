@@ -255,17 +255,15 @@ function getSearchResults($data, $searchOptions) {
     // Loop through the journal entries, checking conditions on each.
     foreach($data as $entry) {
         if (array_key_exists('journal', $searchOptions)
-            && $searchOptions['journal'] != 'JournalName'
+            && $searchOptions['journal'] != ''
             && $searchOptions['journal'] != getElement($entry, "Source"))
             continue;
 
         if (array_key_exists('start_year', $searchOptions)
-            && $searchOptions['start_year'] != "StartingYear"
             && $searchOptions['start_year'] > getYear($entry))
             continue;
 
         if (array_key_exists('end_year', $searchOptions)
-            && $searchOptions['end_year'] != "EndingYear"
             && $searchOptions['end_year'] < getYear($entry))
             continue;
 

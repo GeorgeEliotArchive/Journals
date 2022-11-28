@@ -5,6 +5,16 @@
  if ($_GET) {
      // https://www.php.net/manual/en/reserved.variables.server.php
      parse_str($_SERVER['QUERY_STRING'], $url_params);
+     $params = array(
+         'keywords',
+         'exact',
+         'start_year',
+         'end_year',
+         'journal'
+     );
+     foreach ($params as $param)
+         if (!array_key_exists($param, $url_params))
+             $url_params[$param] = '';
 
      $resp = CallAPI("GET", "https://georgeeliotarchive.org/api/items?collection=17");
      $data = json_decode($resp, true);
@@ -19,7 +29,6 @@
          'journal'    => ''
      );
  }
-
  ?>
 <html>
   <head>
@@ -120,7 +129,6 @@
         </select>.
         <hr style="width:600px; margin-left:0px">
         <button type="submit">Search</button>
-        <button type="reset">Reset Search Options</button>
       </form>
       <hr>
     </div>

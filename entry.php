@@ -41,10 +41,8 @@
 
 <?php $anchor = getYear($entry).'-'.date('m',strtotime($month)).'-'.getDay($entry) ; ?>
 <details id="<?php echo $anchor; ?>">
-  <summary>
-    <?php echo getElement($entry, "Date"); ?>
-    -- Journal Entry (Harris &amp; Johnston, <em>Journals</em>, 
-    <?php echo getElement($entry, "Source"); ?>: <?php echo getElement($entry, "Page"); ?>.)
+  <summary class="citation">
+    <?php require 'citation.php'; ?>
     <div class="tooltip">
       <button id="<?php echo $anchor; ?>" onclick="replyId(this.id)">
         <span class="tooltiptext" id="<?php echo $anchor; ?>tooltip">Copy to clipboard</span>
@@ -52,12 +50,7 @@
       </button>
     </div>
   </summary>
-  <div class="entry"><?php echo getElement($entry, "Journal Entry"); ?></div>
-  <?php $footnotes = getElement($entry, "Footnotes");
-   if ($footnotes != "Element missing: Footnotes!") {
-   ?>
-       <div class="footnotes"><?php echo getElement($entry, "Footnotes"); ?></div>
-  <?php } /* end if */ ?>
+  <?php require 'entry_body.php'; ?>
 </details>
 
 <script>
