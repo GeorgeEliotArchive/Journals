@@ -47,12 +47,17 @@
     <?php echo getElement($entry, "Source"); ?>: <?php echo getElement($entry, "Page"); ?>.)
     <div class="tooltip">
       <button id="<?php echo $anchor; ?>" onclick="replyId(this.id)">
-      <span class="tooltiptext" id="<?php echo $anchor; ?>tooltip">Copy to clipboard</span>
+        <span class="tooltiptext" id="<?php echo $anchor; ?>tooltip">Copy to clipboard</span>
       &#10697;
-    </button>
-</div>
+      </button>
+    </div>
   </summary>
-  <div><?php echo getElement($entry, "Journal Entry"); ?></div>
+  <div class="entry"><?php echo getElement($entry, "Journal Entry"); ?></div>
+  <?php $footnotes = getElement($entry, "Footnotes");
+   if ($footnotes != "Element missing: Footnotes!") {
+   ?>
+       <div class="footnotes"><?php echo getElement($entry, "Footnotes"); ?></div>
+  <?php } /* end if */ ?>
 </details>
 
 <script>
