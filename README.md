@@ -7,7 +7,9 @@ Evans (*AKA George Eliot*)'s journals and make them available in a beautiful and
 accessible website.
 
 The Journals are stored and maintained in an Omeka Classic database,
-and retrieved on page-load through Omeka Classic's API.
+and retrieved on page-load through Omeka Classic's REST API.
+
+The code is hosted on GitHub at <https://github.com/GeorgeEliotArchive/Journals>
 
 
 # Architecture Notes
