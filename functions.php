@@ -27,7 +27,7 @@ function CallAPI($method, $url, $data = false)
                       'Accept: application/json'));
 
     // https://www.php.net/manual/en/function.curl-exec.php
-    curl_setopt($curl, CURLOPT_TIMEOUT, 30); // this takes a LONG time...
+    curl_setopt($curl, CURLOPT_TIMEOUT, 60); // this takes a LONG time...
 
     // Optional Authentication:
     // curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -48,6 +48,8 @@ function CallAPI($method, $url, $data = false)
     return $result;
 }
 
+// Filters the itmes in the collection to only those listed as being
+// part of the right journal.
 function getJournalEntries($data, $journal) {
     $info = array();
 	foreach($data as $val){
@@ -66,7 +68,11 @@ function getJournalEntries($data, $journal) {
     return $info;
 }
 
-// Retrieves a specific item of text from an item in the collection.
+// Retrieves a specific element of text from an item in the
+// collection.
+//
+// Elements expected by the journal rendering code:
+// Date, Source*, Page**, "Journal Entry", Footnotes,
 function getElement($entry, $elementName) {
     global $journal;
     $elements = $entry["element_texts"];
@@ -98,21 +104,6 @@ function getElement($entry, $elementName) {
     return "Element missing: ".$elementName."!";
 }
 
-function getMonthString($entry) {
-    $count = 0;
-    $monthNum = '';
-    $chars = str_split(getElement($entry, "Date"));
-    foreach($chars as $char) {
-        if (is_numeric($char) && $count >= 4 && $count < 6) {
-            $monthNum .= $char;
-            $count += 1;
-        } elseif (is_numeric($char)) {
-            $count += 1;
-        }
-    }
-    return date("F", mktime(0, 0, 0, intval($monthNum), 10));
-}
-
 // Returns day from entry Date (everything after the second dash)
 // Used for creating the entry anchors
 function getDay($entry) {
@@ -133,6 +124,35 @@ function getDay($entry) {
     return $day;
 }
 
+// Returns the month an entry was published in as the name of that
+// month. Eg, "October".
+function getMonthString($entry) {
+    $count = 0;
+    $monthNum = '';
+    $chars = str_split(getElement($entry, "Date"));
+    foreach($chars as $char) {
+        if (is_numeric($char) && $count >= 4 && $count < 6) {
+            $monthNum .= $char;
+            $count += 1;
+        } elseif (is_numeric($char)) {
+            $count += 1;
+        }
+    }
+    return date("F", mktime(0, 0, 0, intval($monthNum), 10));
+}
+
+// Retrieves the year from an entry
+function getYear($entry) {
+    $dateStr = getElement($entry, "Date");
+    if ($dateStr[0] == '[')
+        return intval(substr($dateStr, 1, 5));
+    else
+        return intval(substr($dateStr, 0, 4));
+}
+
+
+// Takes an array of entries and arranges them into an array of months
+// containing the appropriate entries (in chronological order).
 function arrangeEntriesByMonth($entries) {
     $months = array();
     foreach ($entries as $entry) {
@@ -176,15 +196,9 @@ function arrangeEntriesByMonth($entries) {
     return $sortedMonths;
 }
 
-// Retrieves the year from each entry
-function getYear($entry) {
-    $dateStr = getElement($entry, "Date");
-    if ($dateStr[0] == '[')
-        return intval(substr($dateStr, 1, 5));
-    else
-        return intval(substr($dateStr, 0, 4));
-}
-
+// Takes an array of entries and arranges them into an array
+// containing the years, each containing an array of months, which
+// then contain the actual entries (in chronological order).
 function arrangeEntriesByYear($entries) {
     // years array, structure of year => month => entry
     $years = array();
@@ -243,8 +257,9 @@ function arrangeEntriesByYear($entries) {
 }
 
 // Example URL Parameters:
-// ?keywords[1]=this&keywords[2]=that&strict_caps
-// ?keywords[1]=Pug&keywords[2]=Bank&start_year=1860&end_year=1865
+// http://localhost:8000/search.php?keywords=&exact=&start_year=1854&end_year=1880&journal=
+// http://localhost:8000/search.php?keywords=this+that&exact=and+yet&start_year=1854&end_year=1880&journal=
+// http://localhost:8000/search.php?keywords=&exact=&start_year=1858&end_year=1858&journal=The+Making+of+George+Eliot+1857-1859
 function getSearchResults($data, $searchOptions) {
     if (array_key_exists('keywords', $searchOptions))
         $keywords = preg_split("/[\s]/", $searchOptions["keywords"]);
@@ -268,7 +283,7 @@ function getSearchResults($data, $searchOptions) {
             continue;
 
         foreach($entry['element_texts'] as $entryText) {
-            // We only check the body of the journal entry.
+            // We only check the body of the journal entry for text matches.
             if ($entryText["element"]["name"] == "Journal Entry") {
                 $entryContent = $entryText['text'];
                 if (array_key_exists('exact', $searchOptions)
